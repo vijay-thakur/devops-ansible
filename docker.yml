@@ -1,0 +1,8 @@
+---
+- name: Installing Docker CE
+  hosts: 127.0.0.1 
+  remote_user: ubuntu
+  become: true
+  become_method: sudo
+  roles:
+    - docker

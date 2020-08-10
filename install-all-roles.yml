@@ -1,0 +1,82 @@
+---
+- name: Install python
+  hosts: all
+  gather_facts: False
+  tasks:
+  - name: install python
+    raw: test -e /usr/bin/python || (apt -y update && apt install -yf python python-pip) && rm /usr/bin/python && (ln -s /usr/bin/python2.7 /usr/bin/python)
+    become: yes
+    tags:
+      - python
+
+- name: Setup Cassandra
+  hosts: localhost
+  roles:
+    - name: cassandra
+      become: yes
+      tags:
+        - cassandra
+
+- name: Setup docker
+  hosts: localhost
+  roles:
+    - name: docker
+      become: yes
+      tags:
+        - docker
+
+- name: Setup Elasticsearch
+  hosts: localhost
+  roles:
+    - name: elasticsearch
+      become: yes
+      tags:
+        - elasticsearch
+
+- name: Setup java8
+  hosts: localhost
+  roles:
+    - name: java8
+      become: yes
+      tags:
+        - java8
+
+- name: Setup letsencrypt
+  hosts: localhost
+  roles:
+    - name: letsencrypt
+      become: yes
+      tags:
+        - letsencrypt
+
+- name: Setup mysql
+  hosts: localhost
+  roles:
+    - name: mysql
+      become: yes
+      tags:
+        - mysql
+
+- name: Setup Nginx
+  hosts: localhost
+  roles:
+    - name: nginx
+      become: yes
+      tags:
+        - nginx
+
+- name: Setup sonarqube
+  hosts: localhost
+  roles:
+    - name: sonarqube
+      become: yes
+      tags:
+        - sonarqube
+
+- name: Setup AWS SSM agent on Linux EC2 machines
+  hosts: localhost
+  roles:
+    - name: aws-ssm
+      become: yes
+      tags:
+        - aws-ssm

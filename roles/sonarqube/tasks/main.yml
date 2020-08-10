@@ -1,0 +1,70 @@
+---
+# tasks file for sonarqube
+- name: Add group
+  group:
+    name: sonarqube
+    system: yes
+    state: present
+
+- name: Add user
+  user:
+    name: sonarqube
+    comment: Sonar Qube
+    create_home: no
+    system: yes
+    shell: /usr/bin/false
+    group: sonarqube
+    state: present
+
+- name: Install Dependencies
+  apt:
+    pkg: unzip
+    state: present
+    update_cache: yes
+
+- name: Install SonarQube
+  unarchive:
+    src: https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-{{ version }}.zip
+    dest: /usr/local/
+    owner: sonarqube
+    group: sonarqube
+    remote_src: yes
+    creates: /usr/local/sonarqube-{{ version }}
+
+- name: Setup Service 
+  template:
+    src: sonarqube.service.j2
+    dest: /etc/systemd/system/sonarqube.service
+    owner: root
+    group: root
+
+- name: Setup Config
+  template:
+    src: sonar.properties.j2
+    dest: /usr/local/sonarqube-{{ version }}/conf/sonar.properties
+    owner: root
+    group: root
+  notify:
+    - restart sonarqube
+
+- name: Add sonrqube config
+  template:
+    src: sonarqube.round.glass.j2
+    dest: /etc/nginx/sites-available/sonarqube.round.glass.conf
+    owner: root
+    group: root
+
+- name: Disable the default site
+  file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+  notify:
+    - restart nginx
+
+- name: Enable sonarqube config
+  file:
+    src: /etc/nginx/sites-available/sonarqube.round.glass.conf
+    dest: /etc/nginx/sites-enabled/sonarqube.round.glass.conf
+    state: link
+  notify:
+    - restart nginx

@@ -1,0 +1,10 @@
+---
+# vars file for sonarqube
+version:
+sonarqube_dbuser:
+sonarqube_dbname:
+sonarqube_dbpass:
+sonarqube_dbhost:
+domain:
+ssl_crt:
+ssl_key:

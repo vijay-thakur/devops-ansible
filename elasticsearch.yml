@@ -1,0 +1,10 @@
+---
+- name: Install Elasticsearch Cluster
+  hosts: elasticsearch-servers
+  gather_facts: true
+  remote_user: ubuntu
+  become: true
+  become_method: sudo
+  roles:
+    - java8
+    - elasticsearch

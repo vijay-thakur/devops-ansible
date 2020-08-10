@@ -1,0 +1,11 @@
+---
+# vars file for cassandra
+cassandra_version: "3.9"
+cassandra_repo: "deb http://www.apache.org/dist/cassandra/debian 39x main"
+cassandra_keyserver: "pool.sks-keyservers.net"
+cassandra_keyid: "A278B781FE4B2BDA"
+cluster_name: "Test Cluster"
+data_file_directories: "/var/lib/cassandra/data"
+commitlog_directory: "/var/lib/cassandra/commitlog"
+saved_caches_directory: "/var/lib/cassandra/saved_caches"
+cassandra_master_server_ip: "add here private IP"

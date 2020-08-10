@@ -1,0 +1,19 @@
+---
+# tasks file for letsencrypt
+- name: Dependencies
+  apt:
+    pkg: software-properties-common
+    state: present
+    update_cache: yes
+
+- name: Adding LetsEncrypt Repository
+  apt_repository:
+    repo: 'ppa:certbot/certbot'
+    state: present
+    
+- name: Installing Certbot
+  apt:
+    update_cache: yes
+    pkg: python-certbot-nginx
+    state: present
+

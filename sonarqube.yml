@@ -1,0 +1,11 @@
+---
+- name: Install Sonarqube
+  hosts: localhost
+  remote_user: ubuntu
+  become: true
+  become_method: sudo
+  roles:
+    - mysql
+    - nginx
+    - java8 
+    - sonarqube

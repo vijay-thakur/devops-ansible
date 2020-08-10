@@ -1,0 +1,26 @@
+---
+# tasks file for nginx
+- name: Install Nginx
+  apt:
+    pkg: nginx
+    state: present
+    update_cache: true
+  notify:
+    - Start Nginx
+  tags:
+    - nginx-install
+- name: Add Site Config
+  template:
+    src: default.j2
+    dest: '/etc/nginx/sites-available/{{ domain }}.conf' 
+    owner: root
+    group: root
+  tags:
+    - nginx-create-configuration
+- name: Enable Site Config
+  file:
+    src: '/etc/nginx/sites-available/{{ domain }}.conf'
+    dest: '/etc/nginx/sites-enabled/{{ domain }}.conf'
+    state: link
+  tags:
+    - nginx-enable-configuration

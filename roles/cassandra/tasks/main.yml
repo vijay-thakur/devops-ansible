@@ -1,0 +1,34 @@
+---
+# Needed for add-apt-repository
+
+- name: Install python-software-properties
+  apt: pkg=python-software-properties state=installed update-cache=yes
+  tags:
+    - apt
+
+- name: Add APT Repository for Cassandra 3.9
+  apt_repository:
+    repo: "{{cassandra_repo}}"
+    state: present
+  tags:
+    - apt
+
+- name: Add APT key for Cassandra
+  apt_key:
+    keyserver: "{{cassandra_keyserver}}"
+    id: "{{cassandra_keyid}}"
+  tags:
+    - apt
+
+- name: Install Cassandra
+  apt: pkg=cassandra={{cassandra_version}} state=present update-cache=yes
+  register: cassandra_install
+  tags:
+    - packages
+
+
+- name: Install Cassandra config file
+  template: src=cassandra.j2 dest=/etc/cassandra/cassandra.yaml
+  notify: restart cassandra
+  tags:
+    - configuration

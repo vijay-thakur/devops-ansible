@@ -1,0 +1,7 @@
+---
+- hosts: nagios-servers
+  remote_user: ubuntu
+  become: true
+  become_method: sudo
+  roles:
+    - nagios

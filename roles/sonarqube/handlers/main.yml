@@ -1,0 +1,11 @@
+---
+# handlers file for sonarqube
+- name: restart nginx
+  systemd:
+    name: nginx
+    state: restarted
+
+- name: restart sonarqube
+  systemd:
+    name: sonarqube
+    state: restarted

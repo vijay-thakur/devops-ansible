@@ -1,0 +1,63 @@
+---
+# tasks file for mysql
+- name: Download DEB file
+  get_url:
+    url: https://repo.mysql.com//mysql-apt-config_0.8.10-1_all.deb
+    dest: /root/mysql-apt-config_0.8.10-1_all.deb
+    
+- name: Apt Repo Update
+  apt:
+    deb: /root/mysql-apt-config_0.8.10-1_all.deb
+    update_cache: yes
+
+- name: Set MySQL root password
+  debconf:
+    name: mysql-community-server
+    question: mysql-community-server/root-pass
+    value: '{{ mysql_root_password }}'
+    vtype: password
+
+- name: Confirm MySQL root password
+  debconf:
+    name: mysql-community-server
+    question: mysql-community-server/re-root-pass
+    value: '{{ mysql_root_password }}'
+    vtype: password
+
+- name: Install MySQL
+  apt: 
+    pkg: mysql-server,libmysqlclient-dev
+    state: present
+
+- name: Update Configuration
+  copy:
+    src: mysqld.cnf
+    dest: /etc/mysql/mysql.conf.d/
+  notify:
+    - Restart MySQL
+
+- name: Create Database
+  tags: add-user
+  mysql_db:
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+    db: '{{ db_name }}'
+    login_user: '{{ mysql_root_user }}'
+    login_password: '{{ mysql_root_password }}'
+    state: present
+  tags:
+    - mysql-create-database
+
+- name: Create database user
+  tags: add-user
+  when: db_user is defined
+  mysql_user:
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+    user: '{{ db_user }}'
+    password: '{{ db_password }}'
+    priv: '{{ db_name }}.*:ALL'
+    host: '%'
+    login_user: '{{ mysql_root_user }}'
+    login_password: '{{ mysql_root_password }}'
+    state: present
+  tags:
+    - mysql-create-user

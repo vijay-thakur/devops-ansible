@@ -1,0 +1,8 @@
+---
+- name: Install MySQL
+  hosts: localhost
+  remote_user: ubuntu
+  become: true
+  become_method: sudo
+  roles:
+    - mysql

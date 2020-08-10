@@ -1,0 +1,8 @@
+---
+- name: Install Java8
+  hosts: localhost
+  remote_user: ubuntu
+  become: true
+  become_method: sudo
+  roles:
+    - java8

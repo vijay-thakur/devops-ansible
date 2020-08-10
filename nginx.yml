@@ -1,0 +1,8 @@
+---
+- name: Install Nginx
+  hosts: localhost
+  remote_user: ubuntu
+  become: true
+  become_method: sudo
+  roles:
+    - nginx

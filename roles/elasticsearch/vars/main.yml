@@ -1,0 +1,9 @@
+---
+# vars file for elasticsearch
+elasticsearch_version: "5.6.11"
+elasticsearch_apt_key: "https://artifacts.elastic.co/GPG-KEY-elasticsearch"
+elasticsearch_apt_repo: "deb https://artifacts.elastic.co/packages/5.x/apt stable main"
+elasticsearch_cluster_name: "Test Elasticsearch Cluster"
+elasticsearch_ip_1: "node_1_ip"
+elasticsearch_ip_2: "node_2_ip"
+elasticsearch_ip_3: "node_3_ip"

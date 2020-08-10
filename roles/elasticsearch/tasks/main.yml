@@ -1,0 +1,50 @@
+---
+
+- name: Install a list of packages Before Installing Elasticsearch
+  apt:
+    name: "{{ packages }}"
+    state: present
+    update_cache: yes
+  vars:
+    packages:
+    - python-software-properties
+    - apt-transport-https
+  tags:
+    - packages
+#
+# Installing Elasticsearch
+#
+
+# Add Elasticsearch apt key
+
+- name: Add Elasticsearch APT key
+  apt_key:
+   url: "{{elasticsearch_apt_key}}"
+   state: present
+  tags:
+    - apt
+
+# Add the Elasticsearch apt repo. For versions 6 of the stack - use '6.x-prerelease':
+
+- name: Adding Elasticsearch APT repo
+  apt_repository:
+   repo: "{{elasticsearch_apt_repo}}"
+   state: present
+  tags:
+    - apt
+
+# Installing Elasticsearch
+
+- name: Install Elasticsearch Version 5.6.11
+  apt: pkg=elasticsearch={{elasticsearch_version}} state=present update-cache=yes
+  register: elasticsearch_install
+  tags:
+    - packages
+
+
+- name: Install Elasticsearch config file
+  template: src=elasticsearch.j2 dest=/etc/elasticsearch/elasticsearch.yml
+  register: elasticsearch_install
+  notify: restart elasticsearch
+  tags:
+    - configuration

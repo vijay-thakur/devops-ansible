@@ -1,0 +1,25 @@
+---
+# tasks file for java8
+- name: Dependencies
+  apt: 
+    pkg: software-properties-common,python-software-properties 
+    state: present
+    update_cache: yes
+    
+- name: Add Java Repostory
+  apt_repository: 
+    repo: 'ppa:webupd8team/java'
+    state: present
+
+- name: Accept Oracle License
+  debconf:
+    name: oracle-java8-installer
+    question: shared/accepted-oracle-license-v1-1
+    value: 'true'
+    vtype: select
+
+- name: Install Java8
+  apt:
+    update_cache: yes
+    pkg: oracle-java8-installer
+    state: present
